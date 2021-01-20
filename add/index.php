@@ -39,7 +39,7 @@ $conn->close();
 </head>
 <body>
 <div class="container py-5">
-<form method="POST" action="add.php">
+<form method="POST" action="index.php">
 <label for="name">Tiêu đề:</label><br>
   <input type="text" id="name" name="name"><br><br>
   

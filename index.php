@@ -39,7 +39,7 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT title, content, date FROM timeline";
+$sql = "SELECT title, content, date FROM timeline ORDER BY id DESC";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -47,40 +47,35 @@ if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
 	  $datee = $row['date'];
 	  $mydate = strtotime("$datee");
+      $realdate = date('j F, Y', $mydate);
+      $a = array(
+        'January' => 'Tháng Một',
+        'February' => 'Tháng Hai',
+        'March' => 'Tháng Ba',
+        'April' => 'Tháng Tư', 
+        'May' => 'Tháng Năm', 
+        'June' => 'Tháng Sáu', 
+        'July' => 'Tháng Bảy', 
+        'August' => 'Tháng Tám', 
+        'September' => 'Tháng Chín', 
+        'October' => 'Tháng Mười', 
+        'November' => 'Tháng Mười một', 
+        'December' => 'Tháng Mười hai', 
+        );
+      $off_date = strtr($realdate, $a);
 
     echo "<li class='timeline-item bg-white rounded ml-3 p-4 shadow'>
                         <div class='timeline-arrow'></div>
-                        <h2 class='h5 mb-0'>".$row['title']."</h2><span class='small text-gray'><i class='fa fa-clock-o mr-1'></i>".date('jS F, Y', $mydate)."</span>
+                        <h2 class='h5 mb-0'>".$row['title']."</h2><span class='small text-gray'><i class='fa fa-clock-o mr-1'></i>".$off_date."</span>
                         <p class='text-small mt-2 font-weight-light'>".$row['content']."</p>
                     </li>";
   }
 } else {
-  echo "0 results";
+  echo "<p style='color:white'>Không có bài viết nào. Có thể là do tác giả quá lười viết. Quay lại sau nhé :)</p>";
 }
 $conn->close();
 ?>
-                    <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                        <div class="timeline-arrow"></div>
-                        <h2 class="h5 mb-0">Title of section 1</h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i>21 March, 2019</span>
-                        <p class="text-small mt-2 font-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
-                    </li>
-                    <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                        <div class="timeline-arrow"></div>
-                        <h2 class="h5 mb-0">Title of section 2</h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i>5 April, 2019</span>
-                        <p class="text-small mt-2 font-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper.</p>
-                        <p class="text-small mt-2 font-weight-light">Libero expedita explicabo eius fugiat quia aspernatur autem laudantium error architecto recusandae natus sapiente sit nam eaque, consectetur porro molestiae ipsam! Deleniti.</p>
-                    </li>
-                    <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                        <div class="timeline-arrow"></div>
-                        <h2 class="h5 mb-0">Title of section 3</h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i>18 August, 2019</span>
-                        <p class="text-small mt-2 font-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
-                    </li>
-                    <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                        <div class="timeline-arrow"></div>
-                        <h2 class="h5 mb-0">Title of section 4</h2><span class="small text-gray"><i class="fa fa-clock-o mr-1"></i>10 October, 2019</span>
-                        <p class="text-small mt-2 font-weight-light">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque diam non nisi semper, et elementum lorem ornare. Maecenas placerat facilisis mollis. Duis sagittis ligula in sodales vehicula....</p>
-                        <p class="text-small mt-2 font-weight-light">Voluptatibus temporibus esse illum eum aspernatur, fugiat suscipit natus! Eum corporis illum nihil officiis tempore. Excepturi illo natus libero sit doloremque, laborum molestias rerum pariatur quam ipsam necessitatibus incidunt, explicabo.</p>
-                    </li>
+                    
                 </ul><!-- End -->
 
             </div>
