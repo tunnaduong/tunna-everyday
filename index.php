@@ -29,10 +29,7 @@
                 <!-- Timeline -->
                 <ul class="timeline">
 				<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "members";
+require $_SERVER['DOCUMENT_ROOT'] . '/serverconnect.php';
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

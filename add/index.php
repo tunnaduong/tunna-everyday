@@ -6,11 +6,7 @@ $noidung = $_POST['textt'];
 $today = date("Y-m-d"); 
 $error = "Đăng bài viết thành công!";
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "members";
-
+require $_SERVER['DOCUMENT_ROOT'] . '/serverconnect.php';
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 // Check connection
