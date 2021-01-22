@@ -36,7 +36,7 @@ if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT title, content, date FROM timeline ORDER BY id DESC";
+$sql = "SELECT title, content, date, image FROM timeline ORDER BY id DESC";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -60,11 +60,15 @@ if ($result->num_rows > 0) {
         'December' => 'Tháng Mười hai', 
         );
       $off_date = strtr($realdate, $a);
-
+      if (empty($row['image'])){
+      	$row['image'] = "";
+      }
+      
     echo "<li class='timeline-item bg-white rounded ml-3 p-4 shadow'>
                         <div class='timeline-arrow'></div>
                         <h2 class='h5 mb-0'>".$row['title']."</h2><span class='small text-gray'><i class='fa fa-clock-o mr-1'></i>".$off_date."</span>
                         <p class='text-small mt-2 font-weight-light'>".$row['content']."</p>
+                        <img src='".$row['image']."' style='max-width: 100%;max-height: 100%;'/>
                     </li>";
   }
 } else {

@@ -1,27 +1,37 @@
 <?php
-$error = "";
-if (!empty($_POST['submit'])){
-$tieude = $_POST['name'];
-$noidung = $_POST['textt'];
-$today = date("Y-m-d"); 
-$error = "Đăng bài viết thành công!";
+ require $_SERVER['DOCUMENT_ROOT'] . '/serverconnect.php';
+ $error= '';
+  // Initialize message variable
+  $msg = "";
 
-require $_SERVER['DOCUMENT_ROOT'] . '/serverconnect.php';
-// Check connection
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
-}
+  // If upload button is clicked ...
+  if (isset($_POST['submit'])) {
+    $tieude = $_POST['name'];
+    $noidung = $_POST['textt'];
+    $today = date("Y-m-d"); 
+    $error = "Đăng bài viết thành công!";
+    // POST image name
+    if(isset($_POST['tick'])){
+        $image = "/images/".$_FILES['image']['name'];
+    } else {
+        $image = '';
+    }
+    
 
-$sql = "INSERT INTO timeline (title, content, date)
-VALUES ('$tieude', '$noidung', '$today')";
+    // image file directory
+    $tarPOST = $_SERVER['DOCUMENT_ROOT']."/images/".basename($image);
+$sql = "INSERT INTO timeline (title, content, date, image)
+VALUES ('$tieude', '$noidung', '$today', '$image')";
+   
+    // execute query
+    mysqli_query($db, $sql);
 
-if ($conn->query($sql) === FALSE) {
-  echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-$conn->close();
-
-}
+    if (move_uploaded_file($_FILES['image']['tmp_name'], $tarPOST)) {
+        $msg = "Ảnh đã được upload thành công";
+    }else{
+        $msg = "Tải lên ảnh thất bại hoặc không có ảnh";
+    }
+  }
 ?>
 <head>
 <meta charset="utf-8">
@@ -35,17 +45,41 @@ $conn->close();
 </head>
 <body>
 <div class="container py-5">
-<form method="POST" action="index.php">
+<form method="POST" action="index.php" enctype="multipart/form-data">
 <label for="name">Tiêu đề:</label><br>
   <input type="text" id="name" name="name"><br><br>
   
   <label for="textt">Nội dung:</label><br>
 
-<textarea id="textt" name="textt" rows="4" cols="50"></textarea><br><br>
+<textarea id="textt" name="textt" rows="9" cols="48"></textarea><br><br>
+
+
+  <input type="checkbox" id="tick" name="tick" value="contain_pic" onclick="myFunction()">
+  <label for="tick"> Có chứa ảnh</label><br>
+  <input type="file" id="image" name="image" style="display:none">
+  <br>
+  <script type="text/javascript">
+    function myFunction() {
+        // Get the checkbox
+  var checkBox = document.getElementById("tick");
+  // Get the output text
+  var text = document.getElementById("image");
+
+  // If the checkbox is checked, display the output text
+  if (checkBox.checked == true){
+    text.style.display = "block";
+  } else {
+    text.style.display = "none";
+  }
+}
+  </script>
+  <input type="hidden" name="size" value="1000000"> 
 <input type="submit" name="submit">
 <br><br>
 <p><?php echo $error;?></p>
+<p><?php echo $msg;?></p>
 </form>
+
     </div>
 	<style>
 	/*
